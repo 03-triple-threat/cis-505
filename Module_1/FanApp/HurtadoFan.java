@@ -5,7 +5,7 @@
  */
 package Module_1.FanApp;
 
-public class Fan {
+public class HurtadoFan {
 
     //requirement #1
     final static int STOPPED = 0;
@@ -59,7 +59,7 @@ public class Fan {
     }
 
     //requirement #7
-    Fan() {
+    HurtadoFan() {
         int speed;
         Boolean on;
         int radius;
@@ -67,17 +67,21 @@ public class Fan {
     }
 
     //requirement #8
-    Fan(int newSpeed, Boolean newOn, int newRadius, String newColor) {
+    HurtadoFan(int newSpeed, Boolean newOn, int newRadius, String newColor) {
         this.speed = newSpeed;
         this.on = newOn;
         this.radius = newRadius;
         this.color = newColor;
     }
 
-    public static void main (String[] args) {
-        Fan noArgsFan = new Fan();
+    //requirement #9
+    //TODO - complete this requirment 
 
-        Fan argsFan = new Fan(2, true, 5, "red");
+    //requirement 10
+    public static void main (String[] args) {
+        HurtadoFan noArgsFan = new HurtadoFan();
+
+        HurtadoFan argsFan = new HurtadoFan(2, true, 5, "red");
 
         System.out.println(noArgsFan.color);
 
