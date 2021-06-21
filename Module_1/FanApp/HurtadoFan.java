@@ -59,7 +59,7 @@ public class HurtadoFan {
     }
 
     //requirement #7
-    HurtadoFan() {
+    public HurtadoFan() {
         int speed;
         Boolean on;
         int radius;
@@ -67,7 +67,7 @@ public class HurtadoFan {
     }
 
     //requirement #8
-    HurtadoFan(int newSpeed, Boolean newOn, int newRadius, String newColor) {
+    public HurtadoFan(int newSpeed, Boolean newOn, int newRadius, String newColor) {
         this.speed = newSpeed;
         this.on = newOn;
         this.radius = newRadius;
