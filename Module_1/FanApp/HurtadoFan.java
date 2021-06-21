@@ -75,7 +75,11 @@ public class HurtadoFan {
     }
 
     //requirement #9
-    //TODO - complete this requirment 
+    //TODO - complete this requirement 
+    @Override
+    public String toString() {
+        return "State of Fan: " + getSpeed();
+    }
 
     //requirement 10
     public static void main (String[] args) {
@@ -86,6 +90,8 @@ public class HurtadoFan {
         System.out.println(noArgsFan.color);
 
         System.out.println(argsFan.color);
+
+        System.out.println(argsFan.toString());
     }
 
 }
