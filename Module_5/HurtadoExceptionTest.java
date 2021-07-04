@@ -47,7 +47,7 @@ public class HurtadoExceptionTest {
 
         /**
          * try-catch block that will print out an element within the ArrayList so long as 
-         * the user inputs a valid int. 
+         * the user inputs a valid int.
          */
         try {
             int inputNumber = input.nextInt();
