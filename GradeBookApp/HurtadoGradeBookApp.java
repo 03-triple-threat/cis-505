@@ -1,5 +1,12 @@
 package GradeBookApp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -11,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-
 
 public class HurtadoGradeBookApp extends Application {
 
@@ -26,7 +32,7 @@ public class HurtadoGradeBookApp extends Application {
 
     TextField textFieldFirstName = new TextField();
     TextField textFieldLastName = new TextField();
-    TextField textFieldCourse = new TextField(); 
+    TextField textFieldCourse = new TextField();
 
     ComboBox comboBoxGrade = new ComboBox();
 
@@ -34,12 +40,16 @@ public class HurtadoGradeBookApp extends Application {
     Button viewSavedGradesButton = new Button("View Saved Grades");
     Button saveGradebookEntry = new Button("Save Gradebook Entry");
 
+    Label lblSavedGrade = new Label("Saved Grade: ");
+    GridPane pane = new GridPane();
+
+    String newText;
 
 
     @Override
     public void start(Stage primaryStage) {
-        
-        GridPane pane = new GridPane();
+
+        // GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
         pane.setPadding(new Insets(11.5, 12.5, 13.5, 14.5));
         pane.setHgap(5.5);
@@ -55,9 +65,7 @@ public class HurtadoGradeBookApp extends Application {
         pane.add(textFieldCourse, 2, 2);
 
         comboBoxGrade.setPromptText("Select Grade");
-        comboBoxGrade.getItems().addAll(
-            "A", "B", "C", "D", "F"
-        );
+        comboBoxGrade.getItems().addAll("A", "B", "C", "D", "F");
 
         pane.add(lblGrade, 0, 3);
         pane.add(comboBoxGrade, 2, 3);
@@ -70,13 +78,81 @@ public class HurtadoGradeBookApp extends Application {
         actionButtonContainer.getChildren().add(clearButton);
         actionButtonContainer.getChildren().add(viewSavedGradesButton);
 
-        pane.add(actionButtonContainer, 1, 4);
+        pane.add(actionButtonContainer, 1,5);
 
         Scene scene = new Scene(pane);
         primaryStage.setTitle("Hurtado Grade Book App");
         primaryStage.setScene(scene);
         primaryStage.show();
-        
+
+        saveGradebookEntry.setOnAction(e -> {
+            try {
+                saveEnteredGrade();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
+
+        viewSavedGradesButton.setOnAction(e -> viewSavedGrades());
+
     }
-    
+
+    /**
+     * Creates a new grades.csv file with firstName, lastName, course, & grade headers.
+     * 
+     * Method writes the corresponding header values from the GUI to the grades.csv file.
+     * @throws IOException
+     */
+    private void saveEnteredGrade() throws IOException {
+
+        File file = new File("GradeBookApp/grades.csv");
+
+        FileWriter csvWriter = new FileWriter(file);
+
+        csvWriter.append("firstName");
+        csvWriter.append(",");
+        csvWriter.append("lastName");
+        csvWriter.append(",");
+        csvWriter.append("course");
+        csvWriter.append(",");
+        csvWriter.append("grade");
+
+        csvWriter.append("\n" + textFieldFirstName.getText() + "," + textFieldLastName.getText() + "," + textFieldCourse.getText() + "," + comboBoxGrade.getValue() + "\n");
+
+        csvWriter.close();
+
+    }
+
+    // TODO
+    /**
+     * write a method that displays the content of the csv file when view grades is
+     * clicked
+     */
+    private void viewSavedGrades()  {
+        
+        try {
+            Scanner scan = new Scanner(new File("GradeBookApp/grades.csv"));
+
+            scan.useDelimiter(",");
+
+            while (scan.hasNext()) {
+                pane.add(lblSavedGrade, 1, 4);
+                System.out.print(scan.next() + " ");
+                
+                newText = scan.next() + " ";
+                // lblSavedGrade.setText("Saved Grade: " + scan.next() + " ");
+            }
+
+            scan.close();
+
+            lblSavedGrade.setText("Saved Grade: " + newText);
+
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        
+
+    }
 }
