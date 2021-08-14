@@ -15,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -45,9 +47,19 @@ public class HurtadoGradeBookApp extends Application {
 
     String newText;
 
+    TableView table = new TableView();
+
+    TableColumn firstNameColumnHeader = new TableColumn("First Name");
+    TableColumn lastNameColumnHeader = new TableColumn("Last Name");
+    TableColumn courseColumnHeader = new TableColumn("Course");
+    TableColumn gradeColumnHeader = new TableColumn("Grade");
+
 
     @Override
     public void start(Stage primaryStage) {
+
+        primaryStage.setWidth(750);
+        primaryStage.setHeight(500);
 
         // GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
@@ -65,7 +77,7 @@ public class HurtadoGradeBookApp extends Application {
         pane.add(textFieldCourse, 2, 2);
 
         comboBoxGrade.setPromptText("Select Grade");
-        comboBoxGrade.getItems().addAll("A", "B", "C", "D", "F");
+        comboBoxGrade.getItems().addAll("-", "A", "B", "C", "D", "F");
 
         pane.add(lblGrade, 0, 3);
         pane.add(comboBoxGrade, 2, 3);
@@ -93,7 +105,11 @@ public class HurtadoGradeBookApp extends Application {
             }
         });
 
-        viewSavedGradesButton.setOnAction(e -> viewSavedGrades());
+        // viewSavedGradesButton.setOnAction(e -> viewSavedGrades());
+
+        viewSavedGradesButton.setOnAction(e -> viewGrades());
+
+        clearButton.setOnAction(e -> clearGradebookEntry());
 
     }
 
@@ -107,17 +123,9 @@ public class HurtadoGradeBookApp extends Application {
 
         File file = new File("GradeBookApp/grades.csv");
 
-        FileWriter csvWriter = new FileWriter(file);
+        FileWriter csvWriter = new FileWriter(file, true);
 
-        csvWriter.append("firstName");
-        csvWriter.append(",");
-        csvWriter.append("lastName");
-        csvWriter.append(",");
-        csvWriter.append("course");
-        csvWriter.append(",");
-        csvWriter.append("grade");
-
-        csvWriter.append("\n" + textFieldFirstName.getText() + "," + textFieldLastName.getText() + "," + textFieldCourse.getText() + "," + comboBoxGrade.getValue() + "\n");
+        csvWriter.append(textFieldFirstName.getText() + "," + textFieldLastName.getText() + "," + textFieldCourse.getText() + "," + comboBoxGrade.getValue() + "\n");
 
         csvWriter.close();
 
@@ -128,7 +136,7 @@ public class HurtadoGradeBookApp extends Application {
      * write a method that displays the content of the csv file when view grades is
      * clicked
      */
-    private void viewSavedGrades()  {
+    private void readCSV()  {
         
         try {
             Scanner scan = new Scanner(new File("GradeBookApp/grades.csv"));
@@ -136,23 +144,34 @@ public class HurtadoGradeBookApp extends Application {
             scan.useDelimiter(",");
 
             while (scan.hasNext()) {
-                pane.add(lblSavedGrade, 1, 4);
+                // pane.add(lblSavedGrade, 1, 4);
                 System.out.print(scan.next() + " ");
                 
-                newText = scan.next() + " ";
+                // newText = scan.next() + " ";
                 // lblSavedGrade.setText("Saved Grade: " + scan.next() + " ");
             }
 
             scan.close();
 
-            lblSavedGrade.setText("Saved Grade: " + newText);
+            // lblSavedGrade.setText("Saved Grade: " + newText);
 
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
 
-        
+    private void clearGradebookEntry() {
+        textFieldFirstName.setText("");
+        textFieldLastName.setText("");
+        textFieldCourse.setText("");
+        comboBoxGrade.setValue("-");
+    }
 
+    private void viewGrades() {
+        table.setEditable(true);
+        table.getColumns().addAll(firstNameColumnHeader, lastNameColumnHeader, courseColumnHeader, gradeColumnHeader);
+        pane.add(table, 1, 6);
+        readCSV();
     }
 }
